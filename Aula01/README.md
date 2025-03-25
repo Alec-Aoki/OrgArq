@@ -15,6 +15,8 @@ Sequência de bytes armazenada em disco.
 
 A struct é similar ao registro e o campo é similar aos elementos; uma struct possui vários elementos e um registro possui vários campos. A struct e elemento estão na memória principal, enquanto o **registro e o campo estão na memória secundária**.
 
+OBS: priorizar sempre a busca, ou seja, tamanho fixo.
+
 #### Campos
 Em um arquivo, como saber onde começa e termina um campo?
 
@@ -46,10 +48,11 @@ Campo de **tamanho variável**: 2 métodos, indicador de tamanho e delimitadores
 
 *Delimitadores*: caracteres especiais são colocados entre os campos. Mesmas vantagens e desvantagens, mas dificulta a pesquisa e a escolha do do delimitador precisa ser correta.
 
+OBS: caso um campo seja de tamanho fixo, ele **NÃO** deve ter delimitador e não deve estar no meio do registro! Deve estar no começo ou no fim.
+
 #### Registros
 Registros de **tamanho fixo**: podem ter campo de tamaho fixo **ou** variável!
 
 Registros de **tamanho variável**: cada registro começa com um indicador de tamanho ou há delimitadores entre registros. Idem.
 
 **Relative Record Number (RRN)**: usado para registro de tamanho fixo, fornece a posição relativa de cada registro dentro do arquivo (calcula o byte offset do registro). *byte offset* = RRN x tamanho do registro. *"O 1º registro tem RRN = 0, o 2º tem RRN = 1, ..."*.
-
