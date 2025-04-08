@@ -1,0 +1,65 @@
+Algoritmos para remoção lógica de registros de tamanhos fixos (abordagem dinâmica)
+
+1) Busca por RRN
+	1. Abrir arquivo (para leitura)
+	*. Se RNN >= próximo RNN disponível:
+		*.1. Retornar uma mensagem de erro ("Registro não encontrado")
+		*.2. Fechar arquivo
+	2. Ler do header do arquivo o tamanho do registro (tamReg)
+	3. Calcular: byteOffset = RRN * tamReg
+	4. Posicionar ponteiro do arquivo no byteOffset
+	5. Verificar se o registro está removido
+	6. Se o registro existir:
+		6.1. Retornar esse registro
+	7. Senão:
+		7.1. Retornar uma mensagem de erro ("Registro não encontrado")
+	8. Fechar arquivo
+
+2) Remoção por RRN
+	1. Abrir arquivo (para leitura e escrita)
+	*. Se RNN >= próximo RNN disponível:
+		*.1. Retornar uma mensagem de erro ("Registro não encontrado")
+		*.2. Fechar arquivo
+	2. Ler do header do arquivo o tamanho do registro (tamReg)
+	3. Calcular: byteOffset = RRN * tamReg
+	4. Posicionar ponteiro do arquivo no byteOffset
+	5. Verificar se o registro já está removido
+	8. Se não estiver removido:
+		8.1. Marcar registro como removido
+		8.2. Escrever o valor do campo "topo" no campo "prox" do registro
+		8.3. Escrever o RNN do registro a ser removido no campo "topo"
+	9. Fechar o arquivo
+
+3) Inserção de um novo registro
+	1. Abrir arquivo (para leitura e escrita)
+	2. Verificar se o valor do campo "topo" é válido (ou seja, se é >= 0)
+	3. Se não for válido (inserir no fim do arquivo):
+		3.1. Pegar o próximo RRN disponível 
+		3.2. Pegar o tamanho do registro (tamReg)
+		3.3. Calcular: byteOffset = RRN * tamReg
+		3.4. Escrever o registro na posição byteOffset
+		3.5. Atualizar o próximo RRN disponível
+
+	4. Se for válido:
+		4.1. Próximo RRN disponível = valor do campo "topo"
+		4.2. Pegar tamanho do registro (tamReg)
+		4.3. Calcular: byteOffset = RRN * tamReg
+		4.4. Ir para a posição byteOffset do arquivo
+		4.5. Escrever o valor do campo "prox" dessa posição no campo "topo"
+		4.6. Escrever o registro nessa posição
+	5. Fechar o arquivo
+
+4) Imprimir lista de RRNs de registros removidos
+	1. Abrir arquivo (para leitura)
+	2. Pegar valor do campo "topo" (topo)
+	3. Se topo < 0:
+		3.1 Imprimir lista vazia
+		3.2 Fechar arquivo
+	4. Pegar tamanho do registro (tamReg)
+	5. Enquanto topo >= 0:
+		5.1. Calcular: byteOffset = topo * tamReg
+		5.2. Ir para a posição byteOffset no arquivo
+		5.3. Imprimir o registro nessa posição
+		5.4. Atualizar: topo = valor do campo "prox" do registro nessa posição
+	6. Fechar arquivo
+	
