@@ -51,15 +51,15 @@ Algoritmos para remoção lógica de registros de tamanhos fixos (abordagem din�
 
 4) Imprimir lista de RRNs de registros removidos
 	1. Abrir arquivo (para leitura)
-	2. Pegar valor do campo "topo" (topo)
-	3. Se topo < 0:
-		3.1 Imprimir lista vazia
+	2. Pegar valor do campo "topo" e guardar na variável auxiliar "aux"
+	3. Se aux < 0:
+		3.1 Imprimir "Lista vazia"
 		3.2 Fechar arquivo
 	4. Pegar tamanho do registro (tamReg)
-	5. Enquanto topo >= 0:
-		5.1. Calcular: byteOffset = topo * tamReg
+	5. Enquanto aux >= 0:
+		5.1. Calcular: byteOffset = aux * tamReg
 		5.2. Ir para a posição byteOffset no arquivo
 		5.3. Imprimir o registro nessa posição
-		5.4. Atualizar: topo = valor do campo "prox" do registro nessa posição
+		5.4. Atualizar: aux = valor do campo "prox" do registro nessa posição
 	6. Fechar arquivo
 	
