@@ -1,0 +1,53 @@
+# Índice (Estrutura de Indexação de Dados/Método de Acesso)
+- Restringir a busca a um subconjunto de registros em vez de buscar o conjunto completo;
+- É um arquivo adicional ao arquivo de dados (arquivo de índices);
+- É recomendável fazer índices de informações que tem diversidade;
+  - Imagine que 90% dos registros tem o campo a marcado como ```1```, não faria sentido eu fazer um índice para esse campo, pois eu recuperaria ```90%``` dos dados (~ busca linear);
+  - Um campo nome, pelo contrário, teria valor único, ou seja, recuperaria somente ```1``` dado;
+  - **Tipos de Índice**;
+    - *Primário*: o valor do campo não repete no índice;
+    - *Secundário*: pode haver repetição de valores do campo no índice;
+      - *Fracamente ligado*: conectado a um índice secundário fortemente ligado;
+        - Busca com 2 campos ou mais;
+        - Atualizações no arq. dados alteram somente o arq. fortemente ligado, enquanto os fracamente não se alteram;
+          - A inserção ainda tem que ser em todos.
+      - *Fortemente ligado*: conectado diretamente ao arq. de dados (campo ```byteOffset```);
+
+## Índice Primário (Simples/Linear)
+- 2 campos fixos -> registro de tamanho fixo;
+  - ```chave de busca``` (4 bytes);
+  - ```byteOffset do reg. no arq. de dados``` (8 bytes);
+- Criação/Inserção:
+  - Insere o registro no arq. de dados;
+  - Insere a entrada no arq. de índice (**ordenado**);
+- Busca:
+  - **Busca binária** no arquivo de **índice**;
+  - Recupera o byteOffset/RRN;
+  - Recupera o dado no arq. de dados usando o byteOffset (*acesso **direto** ao arq. de dados*);
+  - OBS: caso seja buscado um campo que não possui índice, fazer **busca sequencial** no arq. de dados;
+- Remoção:
+  - Busca;
+  - Remoção no arq. de dados (marcar como lóg. rem., etc.);
+    - Remove primeiro no de dados pois o índice será criado a partir dele, e não o oposto;
+  - *Remoção **física** no arq. de índices* (remover e consertar o arq.);
+    - Por que remoção física?
+      - Pra deixar o arquivo de índice o menor possível;
+    - Para ser eficiente, o índice tem que ser pequeno o suficiente para caber na memória primária;
+- Atualização:
+  - Busca;
+  - Remoção (remove o registro);
+  - Inserção (insere o registro atualizado);
+  - **OBS**: deve haver um campo de status do arq. de índices;
+- Destruição:
+  - Destrói o arquivo de índice;
+- Carregamento:
+  - Leva o arq. de índice pra memória primária;
+
+## Índice Secundário
+- Campos fixos;
+- Representações;
+  - Vetores de tamanho fixo;
+    - Associa um vetor de tamanho fixo a cada chave secundária (esse vetor contém quais registros tem aquele campo);
+    - Quantidade limitada de cópias;
+  - Listas invertidas (visão conceitual);
+    - Associa uma lista encadeada das chaves primárias a cada chave secundária;
